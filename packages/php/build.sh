@@ -50,7 +50,7 @@ ac_cv_func_res_nsearch=no
 termux_step_pre_configure () {
 	LDFLAGS+=" -landroid-glob -llog"
 	# Use c++11 to satisfy icu code requirements
-	CXXFLAGS+= " -std=c++11"
+	# CXXFLAGS+= " -std=c++11"
 
 	export PATH=$PATH:$TERMUX_PKG_HOSTBUILD_DIR/sapi/cli/
 	export NATIVE_PHP_EXECUTABLE=$TERMUX_PKG_HOSTBUILD_DIR/sapi/cli/php
