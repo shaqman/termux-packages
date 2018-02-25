@@ -3,3 +3,5 @@ sudo: required
 cache: bundler
 services: docker
 before_script: mkdir debs && chmod 777 debs
+notifications:
+  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
