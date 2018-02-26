@@ -29,7 +29,7 @@ termux_download() {
 	echo "Downloading ${URL}"
 	local TRYMAX=6
 	for try in $(seq 1 $TRYMAX); do
-		if curl -L --fail --retry 2 -o "$TMPFILE" "$URL"; then
+		if curl -L --fail --retry 2 -o "$TMPFILE" -s "$URL"; then
 			local ACTUAL_CHECKSUM
 			ACTUAL_CHECKSUM=$(sha256sum "$TMPFILE" | cut -f 1 -d ' ')
 			if [ $# = 3 ] && [ -n "$3" ]; then
