@@ -54,7 +54,7 @@ termux_step_pre_configure () {
 	# Use c++11 to satisfy icu code requirements
 	# CXXFLAGS+= " -std=c++11 "
 	# Silent build. Since building with ICU gives more logging than travis can handle (4MB), we disable warning logs
-	CFLAGS += " -w "
+	CFLAGS+=" -w "
 
 	export PATH=$PATH:$TERMUX_PKG_HOSTBUILD_DIR/sapi/cli/
 	export NATIVE_PHP_EXECUTABLE=$TERMUX_PKG_HOSTBUILD_DIR/sapi/cli/php
