@@ -588,7 +588,7 @@ termux_step_setup_toolchain() {
 		fi
 	fi
 
-	export CXXFLAGS="$CFLAGS -std=c++11 "
+	export CXXFLAGS="$CFLAGS "
 	export CPPFLAGS="-I${TERMUX_PREFIX}/include"
 
 	if [ "$TERMUX_PKG_DEPENDS" != "${TERMUX_PKG_DEPENDS/libandroid-support/}" ]; then

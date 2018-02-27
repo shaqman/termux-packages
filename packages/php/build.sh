@@ -52,7 +52,7 @@ ac_cv_func_res_nsearch=no
 termux_step_pre_configure () {
 	LDFLAGS+=" -landroid-glob -llog"
 	# Use c++11 to satisfy icu code requirements
-	# CXXFLAGS+= " -std=c++11 "
+	CXXFLAGS+=" -std=c++11 "
 	# Silent build. Since building with ICU gives more logging than travis can handle (4MB), we disable warning logs
 	CFLAGS+=" -w "
 
