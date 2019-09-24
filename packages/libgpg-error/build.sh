@@ -1,12 +1,15 @@
 TERMUX_PKG_HOMEPAGE=https://www.gnupg.org/related_software/libgpg-error/
 TERMUX_PKG_DESCRIPTION="Small library that defines common error values for all GnuPG components"
-TERMUX_PKG_VERSION=1.27
+TERMUX_PKG_LICENSE="LGPL-2.0"
+TERMUX_PKG_VERSION=1.36
 TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-${TERMUX_PKG_VERSION}.tar.bz2
-TERMUX_PKG_SHA256=4f93aac6fecb7da2b92871bb9ee33032be6a87b174f54abf8ddf0911a22d29d2
+TERMUX_PKG_SHA256=babd98437208c163175c29453f8681094bcaf92968a15cafb1a276076b33c97c
+TERMUX_PKG_BREAKS="libgpg-error-dev"
+TERMUX_PKG_REPLACES="libgpg-error-dev"
 TERMUX_PKG_RM_AFTER_INSTALL="share/common-lisp"
 
-termux_step_post_extract_package () {
+termux_step_post_extract_package() {
 	# Upstream only has Android definitions for platform-specific lock objects.
 	# See https://lists.gnupg.org/pipermail/gnupg-devel/2014-January/028203.html
 	# for how to generate a lock-obj header file on devices.
@@ -23,4 +26,11 @@ termux_step_post_extract_package () {
 		cp $TERMUX_PKG_BUILDER_DIR/lock-obj-pub.aarch64-unknown-linux-android.h \
 			$TERMUX_PKG_SRCDIR/src/syscfg/lock-obj-pub.linux-android.h
 	fi
+}
+
+termux_step_pre_configure() {
+	autoreconf -fi
+	# USE_POSIX_THREADS_WEAK is being enabled for on-device build and causes
+	# errors, so force-disable it.
+	sed -i 's/USE_POSIX_THREADS_WEAK/DONT_USE_POSIX_THREADS_WEAK/g' configure
 }

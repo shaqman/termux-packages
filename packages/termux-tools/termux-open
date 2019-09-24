@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/sh
+#!/bin/sh
 set -e -u
 
 SCRIPTNAME=termux-open
@@ -37,7 +37,7 @@ fi
 
 FILE="$1"
 if [ -f "$FILE" ]; then
-	FILE=`realpath "$FILE"`
+	FILE=$(realpath "$FILE")
 fi
 
 am broadcast --user 0 \

@@ -1,0 +1,21 @@
+diff -uNr mariadb-10.4.8/scripts/mysql_install_db.sh mariadb-10.4.8.mod/scripts/mysql_install_db.sh
+--- mariadb-10.4.8/scripts/mysql_install_db.sh	2019-09-09 00:02:31.000000000 +0300
++++ mariadb-10.4.8.mod/scripts/mysql_install_db.sh	2019-09-18 16:32:41.338083939 +0300
+@@ -466,7 +466,7 @@
+     fi
+     chmod 700 "$dir"
+   fi
+-  if test -n "$user"
++  if test -n "$user" && test "$(uname -o)" != "Android"
+   then
+     chown $user "$dir"
+     if test $? -ne 0
+@@ -478,7 +478,7 @@
+   fi
+ done
+ 
+-if test -n "$user"
++if test -n "$user" && test "$(uname -o)" != "Android"
+ then
+   chown $user "$pamtooldir/auth_pam_tool_dir" && \
+   chmod 0700 "$pamtooldir/auth_pam_tool_dir"

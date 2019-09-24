@@ -1,19 +1,23 @@
 TERMUX_PKG_HOMEPAGE=https://picolisp.com
 TERMUX_PKG_DESCRIPTION="Lisp interpreter and application server framework"
+TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_DEPENDS="libcrypt, openssl"
-TERMUX_PKG_VERSION=18.1.24
-TERMUX_PKG_SHA256=08d66ee82ff242c4adc4cb5f4fe6447d0d64f86a2a91439bd5b13aed83bedd19
+TERMUX_PKG_VERSION=19.7.31
+TERMUX_PKG_SHA256=3d890d1d808bc48e545d14d3b0550b472d767bec0ba9e49861ac55c1427f815d
 # We use our bintray mirror since old version snapshots are not kept on main site.
 TERMUX_PKG_SRCURL=https://dl.bintray.com/termux/upstream/picolisp_${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_BUILD_IN_SRC=true
-# The assembly is not position-independent (would be a major rewrite):
-TERMUX_PKG_BLACKLISTED_ARCHES="x86_64"
-if [ "$TERMUX_ARCH_BITS" = 32 ]; then
-	# "Variable length array in structure won't be supported"
-	TERMUX_PKG_CLANG=no
-fi
+# arm and i686: The c code uses gcc-specific "variable length array in structure":
+# x86_64: The assembly is not position-independent:
+TERMUX_PKG_BLACKLISTED_ARCHES="arm, i686, x86_64"
 
 termux_step_pre_configure() {
+	# Certain packages are not safe to build on device because their
+	# build.sh script deletes specific files in $TERMUX_PREFIX.
+	if $TERMUX_ON_DEVICE_BUILD; then
+		termux_error_exit "Package '$TERMUX_PKG_NAME' is not safe for on-device builds."
+	fi
+
 	# Validate that we have the right version:
 	grep -q "Version ${TERMUX_PKG_VERSION//./ }" src64/version.l || {
 		termux_error_exit "Picolisp version needs to be bumped"
@@ -35,7 +39,7 @@ termux_step_pre_configure() {
 	CFLAGS+=" -c $LDFLAGS $CPPFLAGS"
 }
 
-termux_step_make_install () {
+termux_step_make_install() {
 	cd $TERMUX_PKG_SRCDIR/
 
 	if [ $TERMUX_ARCH_BITS = "64" ]; then

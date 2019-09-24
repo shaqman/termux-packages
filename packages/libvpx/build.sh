@@ -1,11 +1,21 @@
 TERMUX_PKG_HOMEPAGE=https://www.webmproject.org
 TERMUX_PKG_DESCRIPTION="VP8 & VP9 Codec SDK"
-TERMUX_PKG_VERSION=1.6.1
+TERMUX_PKG_LICENSE="BSD 3-Clause"
+TERMUX_PKG_VERSION=1.8.1
 TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://github.com/webmproject/libvpx/archive/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=cda8bb6f0e4848c018177d3a576fa83ed96d762554d7010fe4cfb9d70c22e588
+TERMUX_PKG_SHA256=df19b8f24758e90640e1ab228ab4a4676ec3df19d23e4593375e6f3847dee03e
+TERMUX_PKG_DEPENDS="libc++"
+TERMUX_PKG_BREAKS="libvpx-dev"
+TERMUX_PKG_REPLACES="libvpx-dev"
 
-termux_step_configure () {
+termux_step_configure() {
+	# Certain packages are not safe to build on device because their
+	# build.sh script deletes specific files in $TERMUX_PREFIX.
+	if $TERMUX_ON_DEVICE_BUILD; then
+		termux_error_exit "Package '$TERMUX_PKG_NAME' is not safe for on-device builds."
+	fi
+
 	# Force fresh install of header files:
 	rm -Rf $TERMUX_PREFIX/include/vpx
 
